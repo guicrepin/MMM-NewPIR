@@ -23,7 +23,7 @@ source utils.sh
 Installer_info "Welcome to MMM-NewPIR updater !"
 echo
 
-cd ~/MagicMirror/modules/MMM-NewPir
+cd ~/MagicMirror/modules/MMM-NewPIR
 # deleting package.json because npm install add/update package
 rm -f package.json package-lock.json
 
