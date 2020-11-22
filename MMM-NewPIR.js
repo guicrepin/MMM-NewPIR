@@ -4,18 +4,21 @@
 ******************/
 
 Module.register("MMM-NewPIR", {
+    requiresVersion: "2.13.0",
     defaults: {
       debug: false,
       screen: {
         delay: 2 * 60 * 1000,
         turnOffDisplay: true,
+        mode: 1,
         ecoMode: true,
         displayCounter: true,
         text: "Auto Turn Off Screen:",
         displayBar: true,
         displayStyle: "Text",
         governorSleeping: false,
-        rpi4: false
+        displayLastPresence: true,
+        LastPresenceText: "Last Presence:"
       },
       pir: {
         usePir: true,
@@ -26,6 +29,11 @@ Module.register("MMM-NewPIR", {
         useGovernor: false,
         sleeping: "powersave",
         working: "ondemand"
+      },
+      NPMCheck: {
+        useChecker: true,
+        delay: 10 * 60 * 1000,
+        useAlert: true
       }
     },
 
@@ -39,9 +47,10 @@ Module.register("MMM-NewPIR", {
         //do nothing
       }
 
-      this.config = configMerge({}, this.defaults, this.config)
       if (this.config.debug) mylog = mylog_
       this.sendSocketNotification("INIT", this.config)
+      this.userPrensece = null
+      this.lastPresence = null
       mylog("is now started!")
     },
 
@@ -78,6 +87,14 @@ Module.register("MMM-NewPIR", {
         break
       case "SCREEN_PRESENCE":
         this.sendNotification("USER_PRESENCE", payload ? true : false)
+        if (payload) this.lastPresence = moment().format("LL HH:mm")
+        else this.userPresence = this.lastPresence
+        if (this.userPresence && this.config.screen.displayLastPresence) {
+          let presence= document.getElementById("NEWPIR_PRESENCE")
+          presence.classList.remove("hidden")
+          let userPresence= document.getElementById("NEWPIR_PRESENCE_DATE")
+          userPresence.textContent= this.userPresence
+        }
         break
       }
     },
@@ -88,9 +105,7 @@ Module.register("MMM-NewPIR", {
           this.prepareBar()
           break
         case "USER_PRESENCE":
-          if (payload == true) {
-            this.sendSocketNotification("WAKEUP")
-          }
+          if (payload == true) this.sendSocketNotification("WAKEUP")
           else this.sendSocketNotification("FORCE_END")
           break
         case "SCREEN_END":
@@ -142,6 +157,22 @@ Module.register("MMM-NewPIR", {
         dom.appendChild(screen)
         dom.appendChild(bar)
       }
+      if (this.config.screen.displayLastPresence) {
+        /** Last user Presence **/
+        var presence = document.createElement("div")
+        presence.id = "NEWPIR_PRESENCE"
+        presence.className = "hidden"
+        var presenceText = document.createElement("div")
+        presenceText.id = "NEWPIR_PRESENCE_TEXT"
+        presenceText.textContent = this.config.screen.LastPresenceText
+        presence.appendChild(presenceText)
+        var presenceDate = document.createElement("div")
+        presenceDate.id = "NEWPIR_PRESENCE_DATE"
+        presenceDate.classList.add("presence")
+        presenceDate.textContent = "Loading ..."
+        presence.appendChild(presenceDate)
+        dom.appendChild(presence)
+      }
       return dom
     },
 
@@ -151,8 +182,7 @@ Module.register("MMM-NewPIR", {
 
     getScripts: function () {
       return [
-        "/modules/MMM-NewPIR/scripts/progressbar.js",
-        "/modules/MMM-NewPIR/scripts/configMerge.js"
+        "/modules/MMM-NewPIR/scripts/progressbar.js"
       ]
     },
 

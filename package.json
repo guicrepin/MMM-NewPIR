@@ -1,10 +1,11 @@
 {
   "name": "MMM-NewPIR",
-  "version": "3.0.1",
+  "version": "3.1.0",
   "description": "Magic Mirror PIR Module",
   "main": "MMM-NewPIR.js",
   "scripts": {
-    "install": "scripts/installer.sh"
+    "install": "scripts/installer.sh",
+    "update": "scripts/update.sh"
   },
   "keywords": [
     "magic mirror",
@@ -14,8 +15,9 @@
   ],
   "dependencies": {
     "@bugsounet/governor": "^1.0.3",
+    "@bugsounet/npmcheck": "^0.9.9",
     "@bugsounet/pir": "^1.0.4",
-    "@bugsounet/screen": "^1.0.3"
+    "@bugsounet/screen": "^1.1.0"
   },
   "repository": {
     "type": "git",

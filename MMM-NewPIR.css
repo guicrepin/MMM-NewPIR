@@ -11,16 +11,19 @@
   margin-right: 10px;
 }
 
+#NEWPIR_PRESENCE,
 #NEWPIR_SCREEN {
   font-size: large;
   display: flex;
 }
 
+#NEWPIR_PRESENCE.hidden,
 #NEWPIR_BAR.hidden,
 #NEWPIR_SCREEN.hidden {
   display: none;
 }
 
+#NEWPIR_PRESENCE_TEXT,
 #NEWPIR_SCREEN_TEXT {
   margin-right: 10px;
 }
