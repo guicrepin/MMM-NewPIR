@@ -4,6 +4,7 @@
 ******************/
 
 Module.register("MMM-NewPIR", {
+    requiresVersion: "2.13.0",
     defaults: {
       debug: false,
       screen: {
