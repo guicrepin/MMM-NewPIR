@@ -10,7 +10,9 @@ If you don't have PIR sensor, it can also be used for automatic turn on / turn o
  * New configuration
  * Use my own shared npm library
  * Add new display style
- * More tools: incomming notification for developers 
+ * More tools: incomming notification for developers
+ * New support for turn off screen !
+ * New scripts for updating
 
 ## Screenshot
 ![](https://raw.githubusercontent.com/bugsounet/MMM-NewPIR/master/screenshoot.png)
@@ -18,6 +20,8 @@ If you don't have PIR sensor, it can also be used for automatic turn on / turn o
 ![](https://raw.githubusercontent.com/bugsounet/MMM-NewPIR/master/screenshot_2.png)
 
 ## Installation
+Needed: MagicMirror v2.13.0 and above
+
 Clone the module into your MagicMirror module folder and execute `npm intall` in the module's directory.
 ```
 cd ~/MagicMirror/modules
@@ -34,6 +38,7 @@ To display the module insert it in the config.js file. Here is an example:
 {
   module: 'MMM-NewPIR',
   position: 'top_left',
+  configDeepMerge: true,
   config: {
       screen: {
         delay: 2 * 60 * 1000
@@ -51,18 +56,21 @@ this is the default configuration defined if you don't define any value
 {
   module: 'MMM-NewPIR',
   position: 'top_left',
+  configDeepMerge: true,
   config: {
       debug: false,
       screen: {
         delay: 2 * 60 * 1000,
         turnOffDisplay: true,
+        mode: 1,
         ecoMode: true,
         displayCounter: true,
         text: "Auto Turn Off Screen:",
         displayBar: true,
         displayStyle: "Text",
         governorSleeping: false,
-        rpi4: false
+        displayLastPresence: true,
+        LastPresenceText: "Last Presence:"
       },
       pir: {
         usePir: true,
@@ -84,13 +92,24 @@ this is the default configuration defined if you don't define any value
 | ------- | --- | --- | --- |
 | delay | Time before the mirror turns off the display if no user activity is detected. (in ms) | Number | 120000 |
 | turnOffDisplay | Should the display turn off after timeout? | Boolean | true |
+| mode | mode for turn on/off your screen (see bellow) | number | 1 |
 | ecoMode | Should the MagicMirror hide all module after timeout ? | Boolean | true |
 | displayCounter | Should display Count-down in screen ? | Boolean | true |
 | text | Display a text near the counter | String | "Auto Turn Off Screen:" |
 | displayBar| Should display Count-up bar in screen ? | Boolean | true |
 | displayStyle| Style of the Count-down. Available: "Text", "Line", "SemiCircle", "Circle", "Bar" | String | Text |
 | governorSleeping| Activate sleeping governor when screen is off | Boolean | false |
-| rpi4| rpi4 support or activate DPMS support | Boolean | false |
+| displayLastPresence| Display the date of the last user presence | Boolean | true |
+| LastPresenceText| Display this text near the last presence date | Text | Last Presence: |
+
+ * Available mode:
+   - `mode: 1` - use vgencmd (RPI only)
+   - `mode: 2` - use dpms (version RPI)
+   - `mode: 3` - use tvservice (RPI only)
+   - `mode: 4` - use HDMI CEC
+   - `mode: 5` - use dpms (linux version for debian, ubuntu, ...)
+
+Note: the mode 0 disable turnOffDisplay too
 
 ### Field `pir: {}`
 | Option  | Description | Type | Default |
@@ -130,16 +149,19 @@ Notes: On boot of your RPI, your governor is reset automaticaly to ondemand
 ```
 cd ~/MagicMirror/modules/MMM-NewPIR
 git pull
-npm install
+npm run update
 ```
-
-## Notes:
- *rpi4 feature*: Now it's not needed, and work properly with lasted RPI firmware but if you want `DPMS` support you can use it
  
 ## Donate
  [Donate](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=TTHRH94Y4KL36&source=url), if you love this module !
 
 ## Change Log
+
+### 2020-11-22
+- add new supprt for turn on/off screen
+- add npm checker
+- add last presence
+- del configMerge and take place to MM integred version
 
 ### 2020-08-01
 - Add: config merge script
