@@ -7,6 +7,7 @@ const NodeHelper = require('node_helper')
 const Screen = require("@bugsounet/screen")
 const Pir = require("@bugsounet/pir")
 const Governor = require("@bugsounet/governor")
+const npmCheck = require("@bugsounet/npmcheck")
 
 var _log = function() {
     var context = "[NewPIR]"
@@ -27,6 +28,16 @@ module.exports = NodeHelper.create({
     console.log("[NewPIR] Initialize...")
     var debug = (this.config.debug) ? this.config.debug : false
     if (debug == true) log = _log
+    /** check if update of npm Library needed **/
+    if (this.config.NPMCheck.useChecker) {
+      var cfg = {
+        dirName: __dirname,
+        moduleName: this.name,
+        timer: this.config.NPMCheck.delay,
+        debug: this.config.debug
+      }
+      this.Checker= new npmCheck(cfg, update => { this.sendSocketNotification("NPM_UPDATE", update)} )
+    }
 
     this.NewPIR()
     console.log("[NewPIR] Initialize Complete Version:", require('./package.json').version)
@@ -49,6 +60,21 @@ module.exports = NodeHelper.create({
         break
       case "UNLOCK":
         this.screen.unlock()
+        break
+      case "NPM_UPDATE":
+        if (payload && payload.length > 0) {
+          if (this.config.NPMCheck.useAlert) {
+            payload.forEach(npm => {
+              this.sendNotification("SHOW_ALERT", {
+                type: "notification" ,
+                message: "[NPM] " + npm.library + " v" + npm.installed +" -> v" + npm.latest,
+                title: this.translate("UPDATE_NOTIFICATION_MODULE", { MODULE_NAME: npm.module }),
+                timer: this.getUpdateIntervalMillisecondFromString(this.config.NPMCheck.delay) - 2000
+              })
+            })
+          }
+          this.sendNotification("NPM_UPDATE", payload)
+        }
         break
     }
   },
