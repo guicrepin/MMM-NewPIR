@@ -30,6 +30,8 @@ cd MMM-NewPIR
 npm install
 ```
 
+This module will verify if all screen saver is disabled and disable it if needed
+
 ## Configuration
 To display the module insert it in the config.js file. Here is an example:
 
