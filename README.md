@@ -13,6 +13,7 @@ If you don't have PIR sensor, it can also be used for automatic turn on / turn o
  * More tools: incomming notification for developers
  * New support for turn off screen !
  * New scripts for updating
+ * Touch Screen support
 
 ## Screenshot
 ![](https://raw.githubusercontent.com/bugsounet/MMM-NewPIR/master/screenshoot.png)
@@ -153,11 +154,20 @@ cd ~/MagicMirror/modules/MMM-NewPIR
 git pull
 npm run update
 ```
+
+## TouchScreen Feature
+You can use this feature with a mouse or your touch screen
+
+ * One Click on the screen: Will wake up the screen or restart your shutdown timer
+ * Double Click on the screen: Will turn off your screen
  
 ## Donate
  [Donate](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=TTHRH94Y4KL36&source=url), if you love this module !
 
 ## Change Log
+
+### 2020-12-28
+- add TouchScreen Feature
 
 ### 2020-11-22
 - add new supprt for turn on/off screen

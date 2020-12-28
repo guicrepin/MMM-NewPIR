@@ -173,6 +173,7 @@ Module.register("MMM-NewPIR", {
         dom.appendChild(screen)
         dom.appendChild(bar)
       }
+
       if (this.config.screen.displayLastPresence) {
         /** Last user Presence **/
         var presence = document.createElement("div")
@@ -189,6 +190,8 @@ Module.register("MMM-NewPIR", {
         presence.appendChild(presenceDate)
         dom.appendChild(presence)
       }
+
+      this.touchScreen()
       return dom
     },
 
@@ -242,5 +245,24 @@ Module.register("MMM-NewPIR", {
         module.hide(1000, {lockString: "NEWPIR_LOCK"})
       })
       mylog("Hide All modules.")
+    },
+
+    touchScreen: function () {
+      let clickCount = 0
+      let singleClickTimer = null
+      window.addEventListener('click', () => {
+        clickCount++
+        if (clickCount === 1) {
+          singleClickTimer = setTimeout(() => {
+            clickCount = 0
+            this.sendSocketNotification("WAKEUP")
+          }, 400)
+        } else if (clickCount === 2) {
+          clearTimeout(singleClickTimer)
+          clickCount = 0
+          this.sendSocketNotification("FORCE_END")
+        }
+      }, false)
+      mylog("Touch Screen Function added.")
     }
 });
