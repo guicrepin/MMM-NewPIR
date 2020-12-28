@@ -31,6 +31,7 @@
 
 #NEWPIR_SCREEN_BAR {
   font-size: large;
+  min-width: 100px;
 }
 
 #NEWPIR_SCREEN_BAR.Line {
