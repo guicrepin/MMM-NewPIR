@@ -168,6 +168,9 @@ You can use this feature with a mouse or your touch screen
 
 ## Change Log
 
+### 2020-12-29
+- Review Touch Screen Feature
+
 ### 2020-12-28
 - add TouchScreen Feature
 
