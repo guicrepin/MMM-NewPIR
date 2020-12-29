@@ -18,7 +18,8 @@ Module.register("MMM-NewPIR", {
         displayStyle: "Text",
         governorSleeping: false,
         displayLastPresence: true,
-        LastPresenceText: "Last Presence:"
+        LastPresenceText: "Last Presence:",
+        useTouch: false
       },
       pir: {
         usePir: true,
@@ -118,6 +119,7 @@ Module.register("MMM-NewPIR", {
     notificationReceived: function (notification, payload) {
       switch(notification) {
         case "DOM_OBJECTS_CREATED":
+          if (this.config.screen.useTouch) this.touchScreen()
           this.prepareBar()
           break
         case "USER_PRESENCE":
@@ -191,7 +193,6 @@ Module.register("MMM-NewPIR", {
         dom.appendChild(presence)
       }
 
-      this.touchScreen()
       return dom
     },
 
@@ -201,7 +202,8 @@ Module.register("MMM-NewPIR", {
 
     getScripts: function () {
       return [
-        "/modules/MMM-NewPIR/scripts/progressbar.js"
+        "/modules/MMM-NewPIR/scripts/progressbar.js",
+        "/modules/MMM-NewPIR/scripts/long-press-event.js"
       ]
     },
 
@@ -249,20 +251,21 @@ Module.register("MMM-NewPIR", {
 
     touchScreen: function () {
       let clickCount = 0
-      let singleClickTimer = null
-      window.addEventListener('click', () => {
-        clickCount++
-        if (clickCount === 1) {
-          singleClickTimer = setTimeout(() => {
-            clickCount = 0
-            this.sendSocketNotification("WAKEUP")
-          }, 400)
-        } else if (clickCount === 2) {
-          clearTimeout(singleClickTimer)
-          clickCount = 0
-          this.sendSocketNotification("FORCE_END")
-        }
+      let clickTimer = null
+
+      let NewPIR = document.getElementById("NEWPIR")
+      NewPIR.addEventListener('click', () => {
+        if (clickCount) return clickCount = 0
+        if (!this.hidden) this.sendSocketNotification("WAKEUP")
       }, false)
+
+      window.addEventListener('long-press', () => {
+        clickCount = 1
+        if (this.hidden) this.sendSocketNotification("WAKEUP")
+        else this.sendSocketNotification("FORCE_END")
+        clickTimer = setTimeout(() => { clickCount = 0 }, 400)
+      }, false)
+
       mylog("Touch Screen Function added.")
     }
 });
