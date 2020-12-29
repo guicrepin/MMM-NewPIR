@@ -69,7 +69,7 @@ module.exports = NodeHelper.create({
                 type: "notification" ,
                 message: "[NPM] " + npm.library + " v" + npm.installed +" -> v" + npm.latest,
                 title: this.translate("UPDATE_NOTIFICATION_MODULE", { MODULE_NAME: npm.module }),
-                timer: this.getUpdateIntervalMillisecondFromString(this.config.NPMCheck.delay) - 2000
+                timer: this.config.NPMCheck.delay - 2000
               })
             })
           }

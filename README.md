@@ -73,7 +73,8 @@ this is the default configuration defined if you don't define any value
         displayStyle: "Text",
         governorSleeping: false,
         displayLastPresence: true,
-        LastPresenceText: "Last Presence:"
+        LastPresenceText: "Last Presence:",
+        useTouch: false
       },
       pir: {
         usePir: true,
@@ -104,6 +105,7 @@ this is the default configuration defined if you don't define any value
 | governorSleeping| Activate sleeping governor when screen is off | Boolean | false |
 | displayLastPresence| Display the date of the last user presence | Boolean | true |
 | LastPresenceText| Display this text near the last presence date | Text | Last Presence: |
+| useTouch| Allow to use TouchScreen or mouse (see TouchScreen Field below) | Boolean | false |
 
  * Available mode:
    - `mode: 1` - use vgencmd (RPI only)
@@ -158,13 +160,16 @@ npm run update
 ## TouchScreen Feature
 You can use this feature with a mouse or your touch screen
 
- * One Click on the screen: Will wake up the screen or restart your shutdown timer
- * Double Click on the screen: Will turn off your screen
+ * One Click on the NewPIR Area: will restart your shutdown timer
+ * Long Click on the screen: Will turn off your screen or Will turn on if needed (Toogle)
  
 ## Donate
  [Donate](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=TTHRH94Y4KL36&source=url), if you love this module !
 
 ## Change Log
+
+### 2020-12-29
+- Review Touch Screen Feature
 
 ### 2020-12-28
 - add TouchScreen Feature
