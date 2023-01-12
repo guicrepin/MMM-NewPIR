@@ -26,7 +26,7 @@ Needed: MagicMirror v2.13.0 and above
 Clone the module into your MagicMirror module folder and execute `npm intall` in the module's directory.
 ```
 cd ~/MagicMirror/modules
-git clone https://github.com/bugsounet/MMM-NewPIR.git
+git clone https://github.com/guicrepin/MMM-NewPIR.git
 cd MMM-NewPIR
 npm install
 ```
